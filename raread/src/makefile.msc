@@ -1,0 +1,56 @@
+#
+# Makefile for 'raread' - dual mode version
+#
+# Bob Eager   June 2000
+#
+# Product names
+#
+PRODUCT		= raread
+#
+# Compiler setup
+#
+!IFDEF	PROD
+CFLAGS		= /AC /DDUAL /G2 /Gs /J /nologo /Ox /Zp
+!ELSE
+CFLAGS		= /AC /DDUAL /G2 /J /nologo /Zp
+!ENDIF
+#
+# Names of object files
+#
+OBJ =		$(PRODUCT).obj
+#
+# Other files
+#
+DEF =		$(PRODUCT).def
+LNK =		$(PRODUCT).lnk
+#
+# Final executable file
+#
+EXE =		$(PRODUCT)b.exe
+#
+#-----------------------------------------------------------------------------
+#
+$(EXE):		$(OBJ) $(LNK) $(DEF)
+		link /nologo /E @$(LNK)
+		bind /nologo /map $(EXE)
+#
+# Object files
+#
+raread.obj:	raread.c
+#
+# Linker response file. Rebuild if makefile changes
+#
+$(LNK):		makefile
+		@if exist $(LNK) erase $(LNK)
+		@echo $(OBJ) >> $(LNK)
+		@echo $(EXE) >> $(LNK)
+		@echo $(PRODUCT) >> $(LNK)
+		@echo /map >> $(LNK)
+		@echo $(DEF) >> $(LNK)
+#
+clean:		
+		-erase $(OBJ) $(LNK) $(PRODUCT).map $(PRODUCT)b.bm
+#
+# End of makefile for 'raread'
+#
+
